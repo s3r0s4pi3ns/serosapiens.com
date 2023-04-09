@@ -24,7 +24,62 @@ tu contenido" />
           <h1>Construyendo un blog estatico con bash</h1>
         </header>
       </article>
-      <section><h1 id="antes-de-empezar">Antes de empezar</h1>
+      <section><ul>
+<li><a href="#antes-de-empezar">Antes de empezar</a></li>
+<li><a href="#la-idea-inicial">La idea inicial</a></li>
+<li><a href="#iniciando-el-camino">Iniciando el camino</a>
+<ul>
+<li><a href="#readmemd">README.md</a>
+<ul>
+<li><a
+href="#se-puede-crear-un-sitio-tipo-blog-usando-la-herramienta-pandoc-y-un-par-de-comandos-de-bash">¿Se
+puede crear un sitio tipo blog usando la herramienta pandoc y un par de
+comandos de bash?</a></li>
+</ul></li>
+<li><a href="#que-he-terminado-de-ese-readme-inicial">Que he terminado
+de ese README inicial</a></li>
+</ul></li>
+<li><a href="#el-script">El script</a>
+<ul>
+<li><a href="#generando-html-desde-markdown-con-pandoc">Generando html
+desde markdown con pandoc</a></li>
+<li><a
+href="#iteración-de-archivos-markdown-para-generar-el-html">Iteración de
+archivos markdown para generar el html</a></li>
+<li><a
+href="#construyendo-el-índice-de-artículos-cada-vez-que-lanzamos-el-script">Construyendo
+el índice de artículos cada vez que lanzamos el script</a>
+<ul>
+<li><a
+href="#extrayendo-el-frontmatter-y-generando-un-índice-de-artículos-aceptable">Extrayendo
+el frontmatter y generando un índice de artículos aceptable</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#resultado-final-del-script">Resultado final del script</a>
+<ul>
+<li><a
+href="#como-está-el-directorio-de-trabajo-después-de-todo-este-proceso">Como
+está el directorio de trabajo después de todo este proceso</a></li>
+</ul></li>
+<li><a href="#toque-gourmet-con-docker-y-nginx">Toque gourmet con Docker
+y Nginx</a>
+<ul>
+<li><a href="#definiendo-nuestra-configuración-de-nginx">Definiendo
+nuestra configuración de Nginx</a>
+<ul>
+<li><a href="#dockerfile">Dockerfile</a></li>
+<li><a href="#defaultconf">default.conf</a></li>
+<li><a href="#nginxconf">nginx.conf</a></li>
+<li><a href="#docker-composeyml">docker-compose.yml</a></li>
+</ul></li>
+<li><a
+href="#construyendo-y-levantando-nuestro-contenedor-de-nginx">Construyendo
+y levantando nuestro contenedor de nginx</a></li>
+</ul></li>
+<li><a href="#imagen-docker-de-pandoc">Imagen docker de pandoc</a></li>
+<li><a href="#conclusiones-finales">Conclusiones finales</a></li>
+</ul>
+<h1 id="antes-de-empezar">Antes de empezar</h1>
 <p>Si te importa un carajo como he construido esta basura puedes ir
 directamente al código en el repositorio <a
 href="https://github.com/s3r0s4pi3ns/bash-static-blog">https://github.com/s3r0s4pi3ns/bash-static-blog</a>
