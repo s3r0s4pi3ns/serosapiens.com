@@ -80,7 +80,8 @@ code {
   white-space: pre-wrap;
 }
 
-p code {
+p code,
+li code {
   background: black;
   padding: 0.2rem 0.3rem;
   border-radius: 5px;
@@ -104,6 +105,16 @@ pre code {
 
 ul {
   padding-left: 1rem;
+}
+
+figure {
+  margin: 0;
+}
+
+figure img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
 }
 
 #TOC li {
