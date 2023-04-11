@@ -81,6 +81,9 @@ texto multilinea con sustitucion de variables</a></li>
 <li><a href="#extraer-propiedades-de-un-archivo-json">Extraer
 propiedades de un archivo .json</a></li>
 <li><a
+href="#extraer-propiedades-de-un-frontmatter-en-archivos-markdown">Extraer
+propiedades de un frontmatter en archivos markdown</a></li>
+<li><a
 href="#reemplazar-espacios-en-blanco-por-un-caracter-definido">Reemplazar
 espacios en blanco por un caracter definido</a></li>
 <li><a
@@ -531,28 +534,61 @@ class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href=
 <span id="cb25-28"><a href="#cb25-28" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-29"><a href="#cb25-29" aria-hidden="true" tabindex="-1"></a><span class="ex">extract</span> json_property <span class="st">&quot;</span><span class="va">$json</span><span class="st">&quot;</span> <span class="st">&quot;latitude&quot;</span></span></code></pre></div>
 <h1
+id="extraer-propiedades-de-un-frontmatter-en-archivos-markdown">Extraer
+propiedades de un frontmatter en archivos markdown</h1>
+<p>Para generar los articulos de este blog utilizo esta función que me
+permite extraer propiedades y aplicar unas transformaciones despues o
+simplemente leer el dato, muy útil si trabajas con markdown:</p>
+<div class="sourceCode" id="cb26"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co">### Estructura de frontmatter en un markdown para alojar metadatos</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co"># author: s3r0s4pi3ns</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># date: 2023-03-01</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># datetime: 2023-03-01T00:00:00.000Z</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co"># description: Si tenías la curiosidad de como se crean las herramientas de bash que te permiten pasar como parámetro opciones específicas este es tu # lugar</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># title: Definir argumentos en un script de bash</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a><span class="co"># ---</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a><span class="co">###</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> extract_frontmatter_property()</span> <span class="kw">{</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="bu">local</span> <span class="va">markdown_file</span><span class="op">=</span><span class="va">$1</span></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>    <span class="bu">local</span> <span class="va">property</span><span class="op">=</span><span class="va">$2</span></span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">[</span> <span class="ot">-f</span> <span class="st">&quot;</span><span class="va">$markdown_file</span><span class="st">&quot;</span> <span class="bu">]</span><span class="kw">;</span> <span class="cf">then</span></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>        <span class="va">frontmatter</span><span class="op">=</span><span class="va">$(</span><span class="fu">awk</span> <span class="st">&#39;/^---*$/{p=!p;next}p&#39;</span> <span class="st">&quot;</span><span class="va">$markdown_file</span><span class="st">&quot;</span><span class="va">)</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&quot;</span><span class="va">$frontmatter</span><span class="st">&quot;</span> <span class="kw">|</span> <span class="va">$GREP_COMMAND</span> <span class="at">-E</span> <span class="st">&quot;^</span><span class="va">${property}</span><span class="st">: (.*)&quot;</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">&#39;s/^[^:]*:\s*//&#39;</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>        <span class="bu">echo</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">fi</span></span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb26-22"><a href="#cb26-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-23"><a href="#cb26-23" aria-hidden="true" tabindex="-1"></a><span class="co"># Ejemplos</span></span>
+<span id="cb26-24"><a href="#cb26-24" aria-hidden="true" tabindex="-1"></a><span class="va">title</span><span class="op">=</span><span class="va">$(</span><span class="ex">extract_frontmatter_property</span> <span class="st">&quot;</span><span class="va">$file</span><span class="st">&quot;</span> <span class="st">&quot;title&quot;</span><span class="va">)</span></span>
+<span id="cb26-25"><a href="#cb26-25" aria-hidden="true" tabindex="-1"></a><span class="va">date</span><span class="op">=</span><span class="va">$(</span><span class="ex">extract_frontmatter_property</span> <span class="st">&quot;</span><span class="va">$file</span><span class="st">&quot;</span> <span class="st">&quot;date&quot;</span><span class="va">)</span></span>
+<span id="cb26-26"><a href="#cb26-26" aria-hidden="true" tabindex="-1"></a><span class="va">human_date</span><span class="op">=</span><span class="va">$(</span><span class="ex">extract_frontmatter_property</span> <span class="st">&quot;</span><span class="va">$file</span><span class="st">&quot;</span> <span class="st">&quot;human_date&quot;</span><span class="va">)</span></span></code></pre></div>
+<h1
 id="reemplazar-espacios-en-blanco-por-un-caracter-definido">Reemplazar
 espacios en blanco por un caracter definido</h1>
-<div class="sourceCode" id="cb26"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Se reemplazaran por _</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/[[:space:]]\{1,\}/_/g&#39;</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Eliminar comillas dobles &quot;</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/\&quot;//g&#39;</span></span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Se reemplazaran por _</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/[[:space:]]\{1,\}/_/g&#39;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Bonus: Eliminar comillas dobles &quot;</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">&#39;s/\&quot;//g&#39;</span></span></code></pre></div>
 <h1
 id="sacando-output-a-shell-en-lugar-de-guardar-un-archivo-con-wget">Sacando
 output a shell en lugar de guardar un archivo con wget</h1>
 <p>Al definir un output de <code>qO-</code> sin un redirector
 <code>&gt;</code> va directamente a la shell:</p>
-<div class="sourceCode" id="cb27"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-qO-</span> https://example.com</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">wget</span> <span class="at">-qO-</span> https://example.com</span></code></pre></div>
 <h1 id="convertir-texto-a-hexadecimal">Convertir texto a
 hexadecimal</h1>
-<div class="sourceCode" id="cb28"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quitar el espacio inicial de &quot; %02x&quot;&#39; si lo queremos todo junto</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a> <span class="bu">echo</span> <span class="st">&quot;example&quot;</span> <span class="kw">|</span> <span class="fu">hexdump</span> <span class="at">-ve</span> <span class="st">&#39;1/1 &quot; %02x&quot;&#39;</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="ex">65</span> 6a 65 6d 70 6c 6f 0a</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Quitar el espacio inicial de &quot; %02x&quot;&#39; si lo queremos todo junto</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a> <span class="bu">echo</span> <span class="st">&quot;example&quot;</span> <span class="kw">|</span> <span class="fu">hexdump</span> <span class="at">-ve</span> <span class="st">&#39;1/1 &quot; %02x&quot;&#39;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="ex">65</span> 6a 65 6d 70 6c 6f 0a</span></code></pre></div>
 <h1 id="fork-bomb">Fork bomb</h1>
 <p><a href="https://en.wikipedia.org/wiki/Fork_bomb">Wikipedia
 Fork_bomb</a> Yo cuando la vi por primera vez en el típico artículo
@@ -564,15 +600,15 @@ llama asi misma recursivamente agotando los recursos del sistema.</p>
 porque es muy probable que se te congele si tu sistema no tiene definido
 un numero maximo de procesos. Los procesadores modernos tienen mitigado
 esta movida pero nunca se sabe.</p>
-<div class="sourceCode" id="cb29"><pre
-class="sourceCode bash"><code class="sourceCode bash"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">:()</span><span class="kw">{</span> <span class="bu">:</span><span class="kw">|</span><span class="bu">:</span><span class="kw">&amp;</span> <span class="kw">};</span><span class="bu">:</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Si sustitimos los ; por fork se puede entender como</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="fu">fork()</span> <span class="kw">{</span></span>
-<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">fork</span> <span class="kw">|</span> <span class="ex">fork</span> <span class="kw">&amp;</span></span>
-<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
-<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="ex">fork</span></span></code></pre></div></section>
+<div class="sourceCode" id="cb30"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">:()</span><span class="kw">{</span> <span class="bu">:</span><span class="kw">|</span><span class="bu">:</span><span class="kw">&amp;</span> <span class="kw">};</span><span class="bu">:</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Si sustitimos los ; por fork se puede entender como</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a><span class="fu">fork()</span> <span class="kw">{</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">fork</span> <span class="kw">|</span> <span class="ex">fork</span> <span class="kw">&amp;</span></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="ex">fork</span></span></code></pre></div></section>
     </main>
   </body>
 </html>
